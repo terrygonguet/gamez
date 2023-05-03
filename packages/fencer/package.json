@@ -1,0 +1,12 @@
+{
+	"name": "@terrygonguet/fencer",
+	"version": "0.0.1",
+	"main": "index.js",
+	"scripts": {},
+	"devDependencies": {
+		"typescript": "^4.9.3"
+	},
+	"peerDependencies": {
+		"svelte": "^3.54.0"
+	}
+}
