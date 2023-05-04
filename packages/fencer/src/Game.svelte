@@ -1,47 +1,55 @@
-<script lang="ts">
+<script>
 	import { writable, readonly } from "svelte/store"
-	import { Application, type IApplicationOptions } from "pixi.js"
+	import { Application } from "pixi.js"
 	import { onMount, setContext } from "svelte"
 	import { World as RapierWorld } from "@dimforge/rapier2d"
-	import { createWorld, type IWorld as ECSWorld } from "bitecs"
+	import { createWorld } from "./utils.js"
 
-	export let graphicsOptions: Partial<IApplicationOptions> = {}
-	export let physicsOptions: ConstructorParameters<typeof RapierWorld> = [{ x: 0, y: 0 }]
+	/** @typedef {import("pixi.js").IApplicationOptions} IApplicationOptions */
+	/** @typedef {import("svelte/store").Writable} Writable */
+	/** @typedef {import("./utils").World} World */
+
+	/** @type {Partial<IApplicationOptions>} */
+	export let graphicsOptions = {}
+	/** @type {ConstructorParameters<typeof RapierWorld>} */
+	export let physicsOptions = [{ x: 0, y: 0 }]
 	export let dev = false
 
-	const graphics = writable<Application>()
-	const physics = writable<RapierWorld>()
-	const world = writable<ECSWorld>()
+	/** @type {Writable<Application>} */
+	const graphics = writable()
+	/** @type {Writable<RapierWorld>} */
+	const physics = writable()
+	/** @type {Writable<World>} */
+	const world = writable()
 	$: globalsReady = Boolean($graphics && $physics && $world)
 
 	setContext("world", readonly(world))
 	setContext("graphics", readonly(graphics))
 	setContext("physics", readonly(physics))
-	// setContext("components", createComponentMap(componentSchemas))
 	setContext("dev", dev)
 
-	let container: HTMLElement
-	let canvas: HTMLCanvasElement
+	/** @type {HTMLElement} */
+	let container
+	/** @type {HTMLCanvasElement} */
+	let canvas
 
 	onMount(() => {
-		world.set(createWorld())
-		graphics.set(
-			new Application(
-				Object.assign(
-					{
-						resolution: window.devicePixelRatio,
-						autoDensity: true,
-						hello: true,
-					},
-					graphicsOptions,
-					{
-						view: canvas,
-						resizeTo: container,
-					},
-				),
+		$graphics = new Application(
+			Object.assign(
+				{
+					resolution: window.devicePixelRatio,
+					autoDensity: true,
+					hello: true,
+				},
+				graphicsOptions,
+				{
+					view: canvas,
+					resizeTo: container,
+				},
 			),
 		)
-		physics.set(new RapierWorld(...physicsOptions))
+		$physics = new RapierWorld(...physicsOptions)
+		$world = createWorld({ graphics: $graphics, physics: $physics })
 	})
 
 	if (dev) {

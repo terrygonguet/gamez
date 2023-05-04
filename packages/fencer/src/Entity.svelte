@@ -1,9 +1,9 @@
-<script lang="ts">
-	import { type IWorld, addEntity } from "bitecs"
-	import { getContext, setContext } from "svelte"
-	import type { Readable } from "svelte/store"
+<script>
+	import { addEntity } from "bitecs"
+	import { setContext } from "svelte"
+	import { getWorld } from "./utils.js"
 
-	const world = getContext<Readable<IWorld>>("world")
+	const world = getWorld()
 
 	export const eid = addEntity($world)
 

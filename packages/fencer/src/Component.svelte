@@ -1,14 +1,17 @@
-<script lang="ts">
-	import { type IComponent, type IWorld, addComponent } from "bitecs"
-	import { getContext } from "svelte"
+<script>
+	import { addComponent } from "bitecs"
 	import { noop } from "svelte/internal"
-	import type { Readable } from "svelte/store"
+	import { getEntity, getWorld } from "./utils"
 
-	export let component: IComponent
-	export let init: (eid: number) => void = noop
+	/** @typedef {import("bitecs").IComponent} IComponent */
 
-	const world = getContext<Readable<IWorld>>("world")
-	const eid = getContext<number>("entity")
+	/** @type {IComponent} */
+	export let component
+	/** @type {(eid: number) => void} */
+	export let init = noop
+
+	const world = getWorld()
+	const eid = getEntity()
 
 	addComponent(world, component, eid)
 	init(eid)
