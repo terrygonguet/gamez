@@ -1,5 +1,3 @@
-import type { SvelteComponentTyped } from "svelte"
-
-export const test: "value"
-
-export class Test extends SvelteComponentTyped<{ other?: string }> {}
+export const Game: typeof import("./src/Game.svelte")["default"]
+export const Entity: typeof import("./src/Entity.svelte")["default"]
+export const Component: typeof import("./src/Component.svelte")["default"]

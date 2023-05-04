@@ -1,3 +1,3 @@
-export const test = "value"
-
-export { default as Test } from "./src/Test.svelte"
+export { default as Game } from "./src/Game.svelte"
+export { default as Entity } from "./src/Entity.svelte"
+export { default as Component } from "./src/Component.svelte"

@@ -1,0 +1,7 @@
+{
+	"name": "gamez",
+	"version": "1.0.0",
+	"scripts": {
+		"dev": "pnpm run -r -parallel dev"
+	}
+}
